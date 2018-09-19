@@ -16,15 +16,20 @@ Cloud SDK runs on Linux, macOS, and Windows. It requires Python 2.7.x. Some tool
 
 ### Clone repo down to your Google Cloud Shell
 ```
+git clone https://github.com/Altoros/s1p-bosh-lab.git
+cd s1p-bosh-lab.git
 ```
 
 ### deploy BOSH using Turbo
 * Edit the provision_deploy_script.sh
 ```
+vim setup-bosh-environment/provision_deploy_script.sh
 DNSNAME="yourdns"
-EMAIL="gcptraining09@altoros.net"
+EMAIL="gcptraining@altoros.net"
 ```
 ### upload platform-delivery-update-gcp-turbo.zip to your Google Cloud Shell
+
+### RUN provision_deploy_script.sh
 ```
 ./provision_deploy_script.sh
 ```
@@ -33,7 +38,7 @@ EMAIL="gcptraining09@altoros.net"
 ### SSH into deployed jumpbox
 [Regions and Zones](https://cloud.google.com/compute/docs/regions-zones/)
 ```
- gcloud compute --project "YOUR_PROJECT_ID" ssh --zone "yourregion" "yourinstancename"
+gcloud compute --project "YOUR_PROJECT_ID" ssh --zone "yourregion" "yourinstancename"
 ```
 
 ### Switch to ubuntu user
