@@ -8,6 +8,8 @@ EMAIL="sampleuser@altoros.net"
 
 # Manually upload platform-delivery-update-gcp-turbo.zip
 [ -e ~/platform-delivery-update-gcp-turbo.zip ] && echo "FOUND ~/platform-delivery-update-gcp-turbo.zip" || echo "please manually upload ~/platform-delivery-update-gcp-turbo.zip"
+
+cd ~
 unzip platform-delivery-update-gcp-turbo.zip
 cd ~/platform-delivery-update-gcp-turbo/paas-automation
 
@@ -70,4 +72,5 @@ db_vm_type="small"
 deploy_metrics="false"
 EOF
 
+cd ~/s1p-bosh-lab/setup-bosh-environment
 ./deploy_bosh_via_google_cloud_shell.sh

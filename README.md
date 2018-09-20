@@ -25,10 +25,7 @@ exclude [Hash, optional]: Specifies exclusion placement rules. Available in bosh
 [Common Addons](https://bosh.io/docs/addons-common/)
 
 ## Exercises
-1. [Setup BOSH environment](https://github.com/tosin2013/altoros_bosh_training/tree/master/setup-bosh-environment)
-2. [Login to BOSH Director](https://github.com/tosin2013/altoros_bosh_training/tree/master/login-to-bosh-director)
-3. [Update BOSH Cloud Config](https://github.com/tosin2013/altoros_bosh_training/tree/master/bosh-cloud-config)
-4. [BOSH ADDON overview](https://github.com/tosin2013/altoros_bosh_training/tree/master/bosh-addon-overview)
-5. [jumpbox-boshrelease](https://github.com/tosin2013/altoros_bosh_training/tree/master/jumpbox-boshrelease)
-6. [nginx-release](https://github.com/tosin2013/altoros_bosh_training/tree/master/nginx-release)
-7. [logsearch-boshrelease](https://github.com/tosin2013/altoros_bosh_training/tree/master/logsearch-boshrelease)
+1. [Setup BOSH environment](https://github.com/Altoros/s1p-bosh-lab/tree/master/setup-bosh-environment)
+3. [Creating a Nginx bosh release](https://github.com/Altoros/s1p-bosh-lab/tree/master/nginx-release) - Go over the bosh
+4. [logsearch bosh release](https://github.com/Altoros/s1p-bosh-lab/tree/master/logsearch-boshrelease)
+5. [deployment troubleshooting using bosh commands]()
