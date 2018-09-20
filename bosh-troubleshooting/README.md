@@ -161,7 +161,6 @@ Succeeded
 $ curl 10.0.0.138
 <html><title>hello</title><body><h1>Hello 10.0.0.3</h1></body></html>
 ```
+### Troubleshooting the logsearch deployment
 
-***Remember the logsearch deployment***
-
-***Other BOSH Troubleshooting TIPS***
+### Other BOSH Troubleshooting TIPS
