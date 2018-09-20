@@ -69,11 +69,11 @@ This section contains information about the stemcells, that we are going to use 
   Here we define instance groups which is a collection of  instances tasked to perform same jobs. Each instance group has an associated VM type, persistent disk type, a stemcell and a set of jobs. Instance groups are configured in the deployment manifest.
 
 * [Instance Information](https://bosh.io/docs/deployment-manifest.html#disk-pools)
-* name: Specifies the name of the instance group.
-* instances: Specifies the number instances in the environment.
-* azs: Specifies the Availability Zones the instances will use. Which is defined in your cloud config.
-* vm_type: Specifies the VM types available to deployments. Which is defined in your cloud config.
-* stemcell: Specifies the stemcell name that will be used for the instance. The stemcell is either picked automatically based on the OS name and version provided.
+name: Specifies the name of the instance group.
+instances: Specifies the number instances in the environment.
+azs: Specifies the Availability Zones the instances will use. Which is defined in your cloud config.
+vm_type: Specifies the VM types available to deployments. Which is defined in your cloud config.
+stemcell: Specifies the stemcell name that will be used for the instance. The stemcell is either picked automatically based on the OS name and version provided.
 * networks: Specifies the network available to deployments. Which is defined in your cloud config.
 ```
 - name: nginx-centos
@@ -200,4 +200,14 @@ bosh upload-stemcell --sha1 61eb67dcebc84d4fa818708f79c1e37d811c99e9 \
 Deploy Nginx
 ```
 bosh deploy -d nginx  nginx.yml
+```
+
+Display VMS
+```
+bosh -d nginx vms
+```
+Test Nginx instances  
+```
+curl -sS 10.0.0.137
+<html><title>hello</title><body><h1>Hello ::ffff:10.0.0.3</h1></body></html>
 ```

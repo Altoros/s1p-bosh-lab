@@ -12,10 +12,12 @@ The cloud config is a YAML file that defines IaaS specific configuration used by
 
 ### GCP Cloud config example <-> Work in progress
 ```
+PROJECTENV="CHANGEME"
+cat > update-cloud-config.yml << YAML
 ---
 azs:
 - name: z1
-  cloud_properties: {zone: ((gcp_zone_1))}
+  cloud_properties: {zone: us-east1-b}
 
 vm_types:
 - name: db-small
@@ -24,56 +26,56 @@ vm_types:
     root_disk_size_gb: 10
     root_disk_type: pd-ssd
     labels:
-      turbo: ((env_name))
+      turbo: $PROJECTENV
 - name: db-medium
   cloud_properties:
     machine_type: n1-standard-2
     root_disk_size_gb: 10
     root_disk_type: pd-ssd
     labels:
-      turbo: ((env_name))
+      turbo: $PROJECTENV
 - name: db-large
   cloud_properties:
     machine_type: n1-standard-4
     root_disk_size_gb: 10
     root_disk_type: pd-ssd
     labels:
-      turbo: ((env_name))
+      turbo: $PROJECTENV
 - name: db-xlarge
   cloud_properties:
     machine_type: n1-standard-8
     root_disk_size_gb: 10
     root_disk_type: pd-ssd
     labels:
-      turbo: ((env_name))
+      turbo: $PROJECTENV
 - name: db-2xlarge
   cloud_properties:
     machine_type: n1-standard-16
     root_disk_size_gb: 10
     root_disk_type: pd-ssd
     labels:
-      turbo: ((env_name))
+      turbo: $PROJECTENV
 - name: db-4xlarge
   cloud_properties:
     machine_type: n1-standard-32
     root_disk_size_gb: 10
     root_disk_type: pd-ssd
     labels:
-      turbo: ((env_name))
+      turbo: $PROJECTENV
 - name: db-10xlarge
   cloud_properties:
     machine_type: n1-standard-64
     root_disk_size_gb: 10
     root_disk_type: pd-ssd
     labels:
-      turbo: ((env_name))
+      turbo: $PROJECTENV
 - name: db-16xlarge
   cloud_properties:
     machine_type: n1-standard-96
     root_disk_size_gb: 10
     root_disk_type: pd-ssd
     labels:
-      turbo: ((env_name))
+      turbo: $PROJECTENV
 
 - name: credhub
   cloud_properties:
@@ -81,7 +83,7 @@ vm_types:
     root_disk_size_gb: 10
     root_disk_type: pd-ssd
     labels:
-      turbo: ((env_name))
+      turbo: $PROJECTENV
 
 - name: metrics
   cloud_properties:
@@ -89,7 +91,7 @@ vm_types:
     root_disk_size_gb: 10
     root_disk_type: pd-ssd
     labels:
-      turbo: ((env_name))
+      turbo:  -concourse-https-lb-backend-1az
 
 # Concourse Web
 - name: concourse-web-small
@@ -98,7 +100,7 @@ vm_types:
     root_disk_size_gb: 20
     root_disk_type: pd-ssd
     labels:
-      turbo: ((env_name))
+      turbo: $PROJECTENV
 
 - name: concourse-web-medium
   cloud_properties:
@@ -106,7 +108,7 @@ vm_types:
     root_disk_size_gb: 20
     root_disk_type: pd-ssd
     labels:
-      turbo: ((env_name))
+      turbo: $PROJECTENV
 
 - name: concourse-web-large
   cloud_properties:
@@ -114,7 +116,7 @@ vm_types:
     root_disk_size_gb: 20
     root_disk_type: pd-ssd
     labels:
-      turbo: ((env_name))
+      turbo: $PROJECTENV
 
 - name: concourse-web-xlarge
   cloud_properties:
@@ -122,7 +124,7 @@ vm_types:
     root_disk_size_gb: 20
     root_disk_type: pd-ssd
     labels:
-      turbo: ((env_name))
+      turbo: $PROJECTENV
 
 - name: concourse-web-2xlarge
   cloud_properties:
@@ -130,7 +132,7 @@ vm_types:
     root_disk_size_gb: 20
     root_disk_type: pd-ssd
     labels:
-      turbo: ((env_name))
+      turbo: $PROJECTENV
 
 # Concourse Workers
 - name: worker-medium
@@ -139,7 +141,7 @@ vm_types:
     root_disk_size_gb: 200
     root_disk_type: pd-ssd
     labels:
-      turbo: ((env_name))
+      turbo: $PROJECTENV
 
 - name: worker-large
   cloud_properties:
@@ -147,7 +149,7 @@ vm_types:
     root_disk_size_gb: 200
     root_disk_type: pd-ssd
     labels:
-      turbo: ((env_name))
+      turbo: $PROJECTENV
 
 - name: worker-xlarge
   cloud_properties:
@@ -155,7 +157,7 @@ vm_types:
     root_disk_size_gb: 200
     root_disk_type: pd-ssd
     labels:
-      turbo: ((env_name))
+      turbo: $PROJECTENV
 
 - name: worker-2xlarge
   cloud_properties:
@@ -163,7 +165,7 @@ vm_types:
     root_disk_size_gb: 200
     root_disk_type: pd-ssd
     labels:
-      turbo: ((env_name))
+      turbo: $PROJECTENV
 
 - name: worker-4xlarge
   cloud_properties:
@@ -171,7 +173,7 @@ vm_types:
     root_disk_size_gb: 200
     root_disk_type: pd-ssd
     labels:
-      turbo: ((env_name))
+      turbo: $PROJECTENV
 
 - name: worker-10xlarge
   cloud_properties:
@@ -179,7 +181,7 @@ vm_types:
     root_disk_size_gb: 200
     root_disk_type: pd-ssd
     labels:
-      turbo: ((env_name))
+      turbo: $PROJECTENV
 
 - name: worker-16xlarge
   cloud_properties:
@@ -187,7 +189,7 @@ vm_types:
     root_disk_size_gb: 200
     root_disk_type: pd-ssd
     labels:
-      turbo: ((env_name))
+      turbo: $PROJECTENV
 
 - name: compilation
   cloud_properties:
@@ -196,7 +198,7 @@ vm_types:
     root_disk_size_gb: 10
     root_disk_type: pd-ssd
     labels:
-      turbo: ((env_name))
+      turbo: $PROJECTENV
 
 disk_types:
 - name: 10G
@@ -218,42 +220,42 @@ networks:
 - name: bosh
   type: manual
   subnets:
-  - range:   ((bosh_subnet_range))
-    gateway: ((bosh_subnet_gateway))
+  - range:   10.0.0.64/26
+    gateway: 10.0.0.65
     dns:     [8.8.8.8, 8.8.4.4]
-    static: ((bosh_network_static_ips))
-    reserved: ((bosh_network_reserved_ips))
-    azs:     ((az_list))
+    static: 10.0.0.71-10.0.0.74
+    reserved: 10.0.0.64-10.0.0.70
+    azs:     [z1]
     cloud_properties:
-      network_name: ((bootstrap_network_name))
-      subnetwork_name: ((bosh_subnet_name))
+      network_name: $PROJECTENV-boostrap
+      subnetwork_name: $PROJECTENV-bosh
       ephemeral_external_ip: false
-      tags: ((bosh_network_vm_tags))
+      tags: [$PROJECTENV-internal,$PROJECTENV-nat]
 - name: concourse
   type: manual
   subnets:
-  - range:   ((concourse_subnet_range))
-    gateway: ((concourse_subnet_gateway))
+  - range:   10.0.0.128/26
+    gateway: 10.0.0.129
     dns:     [8.8.8.8, 8.8.4.4]
-    static: ((concourse_network_static_ips))
-    reserved: ((concourse_network_reserved_ips))
-    azs:     ((az_list))
+    static: 10.0.0.133-10.0.0.136
+    reserved: 10.0.0.128-10.0.0.132
+    azs:     [z1]
     cloud_properties:
-      network_name: ((bootstrap_network_name))
-      subnetwork_name: ((concourse_subnet_name))
+      network_name: $PROJECTENV-boostrap
+      subnetwork_name:  $PROJECTENV-concourse
       ephemeral_external_ip: false
-      tags: ((concourse_network_vm_tags))
+      tags: [$PROJECTENV-internal,$PROJECTENV-nat]
 
 vm_extensions:
 - name: web
   cloud_properties:
     backend_service:
-      name: ((web_backend_group))
-    target_pool: ((credhub_target_pool))
+      name: $PROJECTENV-concourse-https-lb-backend-1az
+    target_pool: $PROJECTENV-credhub
 - name: metrics
   cloud_properties:
     backend_service:
-      name: ((metrics_backend_group))
+      name: $PROJECTENV-metrics-https-lb-backend-1az
 
 compilation:
   workers: 3
@@ -261,6 +263,7 @@ compilation:
   az: z1
   vm_type: compilation
   network: bosh
+YAML
 ```
 
 
@@ -279,7 +282,7 @@ vim update-cloud-config.yml
     root_disk_size_gb: 10
     root_disk_type: pd-ssd
     labels:
-      turbo: ((env_name))
+      turbo: CHANGE_TO_PROJECTENV
 ```
 
 ### Add network for Nginx server
@@ -287,20 +290,21 @@ vim update-cloud-config.yml
 ***network [String, required]:*** References a valid network name defined in the Networks block. BOSH assigns network properties to compilation VMs according to the type and properties of the specified network.
 
 ```
+
 - name: nginx
   type: manual
   subnets:
-  - range:  10.0.0.128/26
+  - range:   10.0.0.128/26
     gateway: 10.0.0.129
     dns:     [8.8.8.8, 8.8.4.4]
-    static: 10.0.0.131-10.0.0.140
-    reserved: 10.0.0.129-10.0.0.130
-    azs:      [z1]
+    static: 10.0.0.133-10.0.0.136
+    reserved: 10.0.0.128-10.0.0.132
+    azs: [z1]
     cloud_properties:
-      network_name: altoros-automation-boostrap
-      subnetwork_name: altoros-automation-concourse
+      network_name: CHANGE_TO_PROJECTENV-boostrap
+      subnetwork_name:  CHANGE_TO_PROJECTENV-concourse
       ephemeral_external_ip: true
-      tags: altoros-automation-allow-concourse-https,altoros-automation-allow-ssh
+      tags: [CHANGE_TO_PROJECTENV-internal,CHANGE_TO_PROJECTENV-nat]
 ```
 
 ### Apply Cloud Config to environment on jumpbox
