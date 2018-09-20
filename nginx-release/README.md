@@ -190,9 +190,34 @@ bosh upload-stemcell --sha1 61eb67dcebc84d4fa818708f79c1e37d811c99e9 \
 bosh deploy -d nginx  nginx.yml
 ```
 
-***Display VMS***
+***Display VMS***  
+As you see ***nginx-ubuntu/23a81ebe-af07-4675-adc3-244153394e4a*** is failing we will troubleshoot that later.
 ```
-bosh -d nginx vms
+$ bosh vms
+Using environment '10.0.0.70' as client 'admin'
+
+Task 35
+Task 36
+Task 35 done
+
+Task 36 done
+
+Deployment 'nginx'
+
+Instance                                           Process State  AZ  IPs         VM CID                                   VM Type      Active
+nginx-centos/94e82144-f161-4f12-af2f-5c0dd55df24e  running        z1  10.0.0.137  vm-28a4e3e9-802e-4bfe-7cef-bc2c8813f136  nginx-small  false
+nginx-ubuntu/23a81ebe-af07-4675-adc3-244153394e4a  failing        z1  10.0.0.138  vm-a0de1797-3905-446f-7209-308d7ce52612  nginx-small  false
+
+2 vms
+
+Deployment 'ucc'
+
+Instance                                 Process State  AZ  IPs         VM CID                                   VM Type   Active
+db/30d9216e-38a0-4645-bad7-cc7ae8fbca27  running        z1  10.0.0.134  vm-7f793f9c-f0b7-49b5-7fc7-0cc07fb17c84  db-small  false
+
+1 vms
+
+Succeeded
 ```
 ***Test Nginx instances***
 ```
