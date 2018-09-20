@@ -26,6 +26,6 @@ exclude [Hash, optional]: Specifies exclusion placement rules. Available in bosh
 
 ## Exercises
 1. [Setup BOSH environment](https://github.com/Altoros/s1p-bosh-lab/tree/master/setup-bosh-environment)
-3. [Creating a Nginx bosh release](https://github.com/Altoros/s1p-bosh-lab/tree/master/nginx-release) - Go over the bosh
+3. [Creating a Nginx bosh release](https://github.com/Altoros/s1p-bosh-lab/tree/master/nginx-release) 
 4. [logsearch bosh release](https://github.com/Altoros/s1p-bosh-lab/tree/master/logsearch-boshrelease)
 5. [deployment troubleshooting using bosh commands]()
