@@ -3,6 +3,7 @@
 # Description: Idempotent installation of BOSH, Concourse CI/CD and pipelines
 # for PaaS automation of Cloud Foundry and Kubernetes on GCP
 # Written by: Ryan Meharg - ryan.meharg@altoros.com
+# Modified by: Tosin Akinosho - oluwatosin.akinosho@altoros.com
 #
 # -e          - fail on errors
 # -u          - ensure all variables are set

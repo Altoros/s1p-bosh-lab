@@ -1,8 +1,20 @@
 #!/bin/bash -xe
+#
+# Description: Provision Script used to deploy
+# the deploy_bosh_via_google_cloud_shell.sh script
+# Written by: Tosin Akinosho - oluwatosin.akinosho@altoros.com
+#
+# -e          - fail on errors
+# -u          - ensure all variables are set
+# -o pipeline - catch pipeed command failures
+# -x          - verbose when `export DEBUG=true` is set on shell
+#
+# read -n 1 -s -r -p "Press any key to continue"
+
 [ -f ~/platform-delivery-update-gcp-turbo.zip ]
 PROJECTID="$(gcloud config list --format 'value(core.project)' 2>/dev/null)"
 PROJECTENV="CHANGEME"
-MASTERDNSZONENAME="sp1bosh-$PROJECTID"
+MASTERDNSZONENAME="CHANGEME-$PROJECTID"
 DNSNAME="yourdns"
 EMAIL="sampleuser@altoros.net"
 

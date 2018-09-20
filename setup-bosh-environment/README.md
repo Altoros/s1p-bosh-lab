@@ -27,6 +27,7 @@ vim setup-bosh-environment/provision_deploy_script.sh
 PROJECTENV="CHANGEME"
 DNSNAME="yourdns"
 EMAIL="gcptraining@altoros.net"
+MASTERDNSZONENAME="CHANGEME-$PROJECTID"
 ```
 ### upload platform-delivery-update-gcp-turbo.zip to your Google Cloud Shell
 
