@@ -1,7 +1,7 @@
 #!/bin/bash -xe
 [ -f ~/platform-delivery-update-gcp-turbo.zip ]
 PROJECTID="$(gcloud config list --format 'value(core.project)' 2>/dev/null)"
-PROJECTENV="sp1-bosh"
+PROJECTENV="CHANGEME"
 MASTERDNSZONENAME="sp1bosh-$PROJECTID"
 DNSNAME="yourdns"
 EMAIL="sampleuser@altoros.net"
@@ -19,9 +19,9 @@ cat > vars/gcp.env.sh << EOF
 auth_account='$EMAIL'
 
 # Used to prefix every object
-env_name="altoros-automation"
+env_name="$PROJECTENV"
 
-service_account="altoros-automation"
+service_account="$PROJECTENV"
 
 # Name of the GCP Project
 gcp_project_name="$(gcloud config list --format 'value(core.project)' 2>/dev/null)"

@@ -24,6 +24,7 @@ cd s1p-bosh-lab
 * Edit the provision_deploy_script.sh
 ```
 vim setup-bosh-environment/provision_deploy_script.sh
+PROJECTENV="CHANGEME"
 DNSNAME="yourdns"
 EMAIL="gcptraining@altoros.net"
 ```
