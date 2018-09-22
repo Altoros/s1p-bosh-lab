@@ -1,0 +1,12 @@
+.envrc
+*.key.json
+bbl-ops-files/
+bbl-state.json
+bosh-deployment/
+cloud-config/
+create-director.sh
+create-jumpbox.sh
+delete-director.sh
+delete-jumpbox.sh
+jumpbox-deployment/
+vars/
