@@ -51,6 +51,3 @@ grep -q direnv ~/.bashrc || echo -e 'if [ ! -z "$(which direnv)" ]; then\n  eval
 
 # make exec
 chmod +x ~/bin/*
-
-bash -l
-
