@@ -17,7 +17,7 @@ Cloud SDK runs on Linux, macOS, and Windows. It requires Python 2.7.x. Some tool
 ### Clone repo down to your Google Cloud Shell
 ```
 git clone https://github.com/Altoros/s1p-bosh-lab.git
-cd s1p-bosh-lab
+cd s1p-bosh-lab/setup-bosh-environment
 ```
 
 ### deploy BOSH using Turbo
