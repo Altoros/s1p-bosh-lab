@@ -1,4 +1,3 @@
-.envrc
 *.key.json
 bbl-ops-files/
 bbl-state.json
