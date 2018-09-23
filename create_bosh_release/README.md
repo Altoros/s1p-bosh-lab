@@ -1,6 +1,6 @@
 # Create bosh release (The Release)
 
-Typically you wont be creating releases unless you have a particular use case, mostly you will be consuming releases. It does not hurt to know their structure and how they come together. It definitely helps out when things are done working as expected. 
+Typically you wont be creating releases unless you have a particular use case, mostly you will be consuming releases. It does not hurt to know their structure and how they come together. It definitely helps out when things are done working as expected.
 
 ### Initialize an empty release
 
@@ -28,7 +28,6 @@ $ tree
 
 Create a router job with:
 ```exec
-cd ~/greeter-release
 bosh generate-job router
 ```
 
@@ -52,6 +51,8 @@ $ tree
 ### Update the router spec
 
 Open the file `jobs/router/spec` in a text editor and add the following content to it:
+
+* Tip if using vim using `dG` will delete contents of file if on first line. To get to top line `g`, and to get to front of line `|`. To insert `i`, and to save `ZZ` or `:wq`. There are vim experts all around you please ask if you need some help.
 
 ```file=~/greeter-release/jobs/router/spec
 ---
@@ -152,7 +153,6 @@ upstreams: <%= p('upstreams') %>
 Generate a job:
 
 ```exec
-cd ~/greeter-release
 bosh generate-job app
 ```
 
@@ -263,7 +263,6 @@ exit 0
 
 Generate the Ruby package:
 ```exec
-cd ~/greeter-release
 bosh generate-package ruby
 ```
 
@@ -329,7 +328,6 @@ ${BOSH_INSTALL_TARGET}/bin/gem install ruby/bundler-1.11.2.gem --local --no-ri -
 ### Download Ruby sources
 
 ```exec
-cd ~/greeter-release
 mkdir ~/packages/
 curl https://cache.ruby-lang.org/pub/ruby/2.3/ruby-2.3.0.tar.gz --create-dirs -o ~/packages/ruby-2.3.0.tar.gz
 curl https://rubygems.org/downloads/bundler-1.11.2.gem --create-dirs -o ~/packages/bundler-1.11.2.gem
@@ -342,7 +340,6 @@ bosh add-blob ~/packages/bundler-1.11.2.gem ruby/bundler-1.11.2.gem
 
 Generate the greeter package with:
 ```exec
-cd ~/greeter-release
 bosh generate-package greeter
 ```
 
@@ -410,9 +407,8 @@ mkdir -p ${BOSH_INSTALL_TARGET}/gem_home
 
 ### Download greeter sources
 
-Donload greeter sources with:
+Download greeter sources with:
 ```exec
-apt-get install git
 git clone https://github.com/Altoros/greeter.git ~/greeter-release/src/greeter
 ```
 
@@ -433,7 +429,6 @@ blobstore:
 
 Create a release by running:
 ```exec
-cd ~/greeter-release
 bosh create-release --force
 bosh upload-release
 ```
