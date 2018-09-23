@@ -602,7 +602,7 @@ bosh update-cloud-config <(bosh int cloud-config/cloud-config.yml -o cloud-confi
 ```
 
 ### Update the greeter deployment with static external IP and open up firewall rule for it.
-We will create an ops file, `greeter-opfile.yml` for adding our changes, that we will then patch onto main release.
+We will create an ops file, `greeter-opfile.yml` for adding our changes, that we will then patch onto main release. Looking at examples doesn't hurt [bosh external ip](https://github.com/cloudfoundry/bosh-deployment/blob/master/external-ip-not-recommended.yml).
 ```file:greeter-opfile.yml
 - type: replace
   path: /instance_groups/name=router/networks/0/default?
