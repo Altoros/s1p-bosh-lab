@@ -560,6 +560,18 @@ gcloud beta compute addresses create router-ip  --region=us-east1 --network-tier
 gcloud beta compute addresses describe router-ip --region us-east1 --format json|jq -r '.address'
 ```
 
+### BOSH Cloud config
+[Updating Cloud Config](https://bosh.io/docs/update-cloud-config/)  
+The cloud config is a YAML file that defines IaaS specific configuration used by all deployments. It allows to separate IaaS specific configuration into its own file and keep deployment manifests IaaS agnostic.
+
+### Cloud config examples
+[AWS CPI example](https://bosh.io/docs/aws-cpi/#cloud-config)  
+[Azure CPI example](https://bosh.io/docs/azure-cpi/#cloud-config)  
+[OpenStack CPI example](https://bosh.io/docs/openstack-cpi/#cloud-config)  
+[SoftLayer CPI example](https://bosh.io/docs/softlayer-cpi/#cloud-config)  
+[Google Cloud Platform CPI example](https://bosh.io/docs/google-cpi/#cloud-config)  
+[vSphere CPI example](https://bosh.io/docs/vsphere-cpi/#cloud-config)  
+
 ### cloud config update, specific vip type to allow us to use external static IP
 ```file:cloud-config/ops.yml
 - type: replace
