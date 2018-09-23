@@ -1,16 +1,6 @@
 # Create bosh release (The Release)
 
-For other exercises we will be stepping out of our deployment directory and we will only have one deployment, so we will do something to facilitate progress.
-
-Create file `~/.envrc` and add following content.
-
-```file:~/.envrc
-pushd s1p-bosh-lab/setup-bosh-environment/
-  if [ -f bbl-state.json ]; then
-    eval "$(bbl print-env)"
-  fi
-popd
-```
+Typically you wont be creating releases unless you have a particular use case, mostly you will be consuming releases. It does not hurt to know their structure and how they come together. It definitely helps out when things are done working as expected. 
 
 ### Initialize an empty release
 

@@ -44,5 +44,4 @@ We can validate that env variables where set by running following:
 env|grep -i bbl
 BBL_IAAS=gcp
 BBL_GCP_REGION=us-east1
-BBL_GCP_SERVICE_ACCOUNT_KEY=s1pbosh.key.json
 ```
