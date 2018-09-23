@@ -74,4 +74,4 @@ set +e
 set -e
 
 ## Prompt user to kick off login Shell
-echo -e "Now that all pre-work is done, we will need to do a few more things:\n\nbash -l\ndirenv allow\nbbl up"
+echo -e "Now that all pre-work is done, we will need to do a few more things:\n\nbash -l\nbbl up"
