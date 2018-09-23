@@ -14,12 +14,6 @@ fi
 # make bin if not there
 [ ! -d ~/bin ] && mkdir ~/bin
 
-if [ -z "$(which direnv)" ]; then
-  echo
-  echo "Installing direnv..."
-  wget -O ~/bin/direnv https://github.com/direnv/direnv/releases/download/v2.17.0/direnv.linux-amd64
-fi
-
 if [ -z "$(which bbl)" ]; then
   echo
   echo "Installing bbl..."
@@ -47,7 +41,7 @@ fi
 
 # in .bashrc
 grep -q '~/bin:' ~/.bashrc || echo -e 'export PATH=~/bin:$PATH' >> ~/.bashrc
-grep -q direnv ~/.bashrc || echo -e 'if [ ! -z "$(which direnv)" ]; then\n  eval "$(direnv hook bash)"\nfi' >> ~/.bashrc
+grep -q s1p-bosh-lab ~/.bashrc || echo -e 'if [ -d ~/s1p-bosh-lab ]; then\n  source ~/s1p-bosh-lab/.envrc\nfi' >> ~/.bashrc
 
 # make exec
 chmod +x ~/bin/*
