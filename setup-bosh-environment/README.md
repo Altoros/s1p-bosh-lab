@@ -25,7 +25,6 @@ The below script will pull down remote dependencies from Debian repo, and other 
 ```
 ./setup_bbl_bosh.sh
 ```
-### upload platform-delivery-update-gcp-turbo.zip to your Google Cloud Shell
 
 ### RUN provision_deploy_script.sh
 ```
@@ -36,7 +35,6 @@ cd setup-bosh-environment
 Once we run this script it will prompt you to run following:
 ```
 bash -l
-direnv allow
 bbl up
 ```
 
