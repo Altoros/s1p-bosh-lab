@@ -8,4 +8,6 @@ create-jumpbox.sh
 delete-director.sh
 delete-jumpbox.sh
 jumpbox-deployment/
+terraform/
 vars/
+*.pem

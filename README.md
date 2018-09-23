@@ -26,6 +26,7 @@ exclude [Hash, optional]: Specifies exclusion placement rules. Available in bosh
 
 ## Exercises
 1. [Setup BOSH environment](setup-bosh-environment)
+2. [Create Greeter Bosh Release](create_bosh_release)
 2. [Update Cloud Config](update-cloud-config)
 3. [Creating a Nginx BOSH release](nginx-release)
 4. [Creating logsearch BOSH Release](logsearch-boshrelease)

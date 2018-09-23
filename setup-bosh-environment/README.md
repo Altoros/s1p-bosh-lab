@@ -20,14 +20,10 @@ git clone https://github.com/Altoros/s1p-bosh-lab.git
 cd s1p-bosh-lab/setup-bosh-environment
 ```
 
-### deploy BOSH using Turbo
-* Edit the provision_deploy_script.sh
+### deploy using bbl
+The below script will pull down remote dependencies from Debian repo, and other github projects. It will also update ~/.bashrc.
 ```
-vim setup-bosh-environment/provision_deploy_script.sh
-PROJECTENV="CHANGEME"
-DNSNAME="yourdns"
-EMAIL="gcptraining@altoros.net"
-MASTERDNSZONENAME="CHANGEME-$PROJECTID"
+./setup_bbl_bosh.sh
 ```
 ### upload platform-delivery-update-gcp-turbo.zip to your Google Cloud Shell
 
