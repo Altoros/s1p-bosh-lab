@@ -1,4 +1,4 @@
-# Create bosh release
+# Create bosh release (The Release)
 
 For other exercises we will be stepping out of our deployment directory and we will only have one deployment, so we will do something to facilitate progress.
 
@@ -418,7 +418,7 @@ mkdir -p ${BOSH_INSTALL_TARGET}/gem_home
 /var/vcap/packages/ruby/bin/bundle install --local --no-prune --path ${BOSH_INSTALL_TARGET}/gem_home
 ```
 
-## Download greeter sources
+### Download greeter sources
 
 Donload greeter sources with:
 ```exec
@@ -439,13 +439,22 @@ blobstore:
     blobstore_path: /tmp/bosh-blobstore
 ```
 
-### Generate the deployment manifest
+### Create the release
+
+Create a release by running:
+```exec
+cd ~/greeter-release
+bosh create-release --force
+bosh upload-release
+```
+
+## Generate the deployment manifest (The Manifest)
 
 Save the following as `~/greeter-release/greeter.yml`:
 
 ```file=~/greeter-release/greeter.yml
 ---
-name: greeter-release
+name: greeter
 
 releases:
 - name: greeter-release
@@ -501,36 +510,22 @@ instance_groups:
         - 10.0.255.7:8080
 ```
 
-### Create the release
 
-Create a release by running:
-```exec
-cd ~/greeter-release
-bosh create-release --force
-bosh upload-release
-```
 
-### Upload stemcell
+## Upload stemcell (The Stemcell)
 
-If you haven't done this before, upload a stemcell with:
+Lets upload the latest trusty ubuntu stemcell with:
 
 ```exec
-# Ubuntu trusty
-bosh_cmd=$(curl -s https://bosh.io/stemcells/bosh-google-kvm-ubuntu-trusty-go_agent|grep -A2 "bosh upload-stemcell"|sed -e 's/<div.*<pre>//g' -e 's/<a.*">//g' -e 's/<\/a>.*$//g' -e 's/\\//g' |tr -d '\n')
-eval $bosh_cmd
+bosh upload-stemcell https://bosh.io/d/stemcells/bosh-google-kvm-ubuntu-trusty-go_agent
 ```
 
-### Deploy!
+## Deploy!
 
 Finally, everything is ready for deployment:
 
 ```exec
-bosh -d greeter-release -n  deploy greeter.yml
-```
-
-Let's check if everything has been deployed as intended:
-```exec
-curl "http://{{source ~/deployment/vars && echo $eip_greeter}}:8080"
+bosh -d greeter -n  deploy greeter.yml
 ```
 
 To list all your VMs, execute this command:
@@ -538,14 +533,34 @@ To list all your VMs, execute this command:
 bosh vms
 ```
 
+In this bbl setup environment we can ssh directly to jumpbox, but not bosh or bosh created vms. We can connect to bosh and bosh created vms via tunneling and for that we had to install bsd `nc`.
+
 To ssh to various systems in this env please look at this [bbl ssh and bosh ssh](https://github.com/cloudfoundry/bosh-bootloader/blob/master/docs/howto-ssh.md)
 
-### Add external ip to your deployment
+To ssh to jumpbox we can gather information from release, and from var store, or we can use bbl to jump us over.
+```
+bbl ssh --jumpbox
+```
+
+For bosh itself:
+```
+bbl ssh --director
+```
+
+For our created vms:
+```
+bosh -d greeter ssh router
+curl 10.0.255.8:8080
+```
+
+## Add external ip to your deployment
+First we will ask our IaaS for an IP.
+```
 gcloud beta compute addresses create router-ip  --region=us-east1 --network-tier=PREMIUM
-
 gcloud beta compute addresses describe router-ip --region us-east1 --format json|jq -r '.address'
+```
 
-## cloud config update
+### cloud config update, specific vip type to allow us to use external static IP
 ```file:cloud-config/ops.yml
 - type: replace
   path: /networks/-
@@ -554,8 +569,8 @@ gcloud beta compute addresses describe router-ip --region us-east1 --format json
     type: vip
 ```
 
-## After we added
-```
+### We are also going to explore adding a custom tag to our vm
+```file:cloud-config/ops.yml
 - type: replace
   path: /vm_extensions/-
   value:
@@ -564,34 +579,62 @@ gcloud beta compute addresses describe router-ip --region us-east1 --format json
        tags: [router-ip-open]
 ```       
 
+Verify
+```
+bosh int <(bosh int cloud-config/cloud-config.yml -o cloud-config/ops.yml ) -l vars/cloud-config-vars.yml
+```
+
+Apply
 ```
 bosh update-cloud-config <(bosh int cloud-config/cloud-config.yml -o cloud-config/ops.yml ) -l vars/cloud-config-vars.yml
 ```
 
+### Update the greeter deployment with static external IP and open up firewall rule for it.
+We will create an ops file, `greeter-opfile.yml` for adding our changes, that we will then patch onto main release.
+```file:greeter-opfile.yml
+- type: replace
+  path: /instance_groups/name=router/networks/0/default?
+  value: [dns, gateway]
 
-## greeting app
+- type: replace
+  path: /instance_groups/name=router/networks/-
+  value:
+    name: public
+    static_ips: [((external_ip))]
+
+- type: replace
+  path: /instance_groups/name=router/vm_extensions?
+  value: [gcp-tag]
+```  
+
+You can verify that values were able to be placed into your manifest, but not necessarily are in right location or valid.
 ```
-bosh -d greeter-release -n  deploy greeter.yml -o ops-ip.yml -v external_ip=$(gcloud beta compute addresses describe router-ip --region us-east1 --format json|jq -r '.address')
+bosh int greeter.yml -o greeter-opfile.yml -v external_ip=$(gcloud beta compute addresses describe router-ip --region us-east1 --format json|jq -r '.address')
+```  
+
+Run and see if any changes are detected.
+```
+bosh -d greeter -n  deploy greeter.yml -o greeter-opfile.yml -v external_ip=$(gcloud beta compute addresses describe router-ip --region us-east1 --format json|jq -r '.address')
 ```
 
-for the moment inside of setup folder
+Add firewall rule by gathering some info from our setup files. Notice we did not use our new tag. If we look at the console and look at router machine and app machine we will notice that network tags are added for job, release, deployment, etc.
 ```
+cd ../s1p-bosh-lab/setup-bosh-environment
 gcloud compute firewall-rules create allow-router-http --direction=INGRESS --priority=1000 --network=$(bosh int vars/director-vars-file.yml --path /network) --action=ALLOW --rules=tcp:8080 --source-ranges=0.0.0.0/0 --target-tags=router
 ```
 
+Now we should be able to use static ip to address the router directly.
 ```
-curl $(gcloud beta compute addresses describe router-ip --region us-east1 --format json|jq -r '.address'):8080
+curl "http://$(gcloud beta compute addresses describe router-ip --region us-east1 --format json|jq -r '.address'):8080"
 ```
 
 
-###  Scale your deployment
+## Scale your deployment
+In your `~/greeter-release/greeter.yml` manifest:
 
-In your `~/deployment/greeter.yml` manifest:
-
-1. Add the `10.0.0.9` IP to the private static pool `/networks/name=private/subnets/gateway=10.0.0.1/static/-`
-1. Add the `10.0.0.9` IP from the private static pool to `/jobs/name=app/networks/name=private/static_ips/-`
-1. Increase the number of instances in `/jobs/name=app/instances` by 1
-1. Append `10.0.0.9:8080` to the `/jobs/name=router/properties/upstreams/-` array
+1. Add the `10.0.255.9` IP from the private static pool to `/instance_groups/name=app/networks/name=private/static_ips/-`
+1. Increase the number of instances in `/instance_groups/name=app/instances` to 2
+1. Append `10.0.255.9:8080` to the `/instance_groups/name=router/jobs/name=router/properties/upstreams/-` array
 
 
 The best way to do this is to create an opfile. We are leaving the creation of such file as an excesse to the users. Another option s to update the manifest manually.
@@ -600,11 +643,11 @@ Note, that when identifying properties path we use the same syntax, as it is use
 Deploy once again:
 
 ```exec
-bosh  -d greeter-release -n  deploy -o ~/deployment/greeter-opfile.yml ~/deployment/greeter.yml
+bosh  -d greeter -n  deploy -o greeter-opfile.yml greeter.yml
 ```
 
 And if you `curl` the router multiple times, you should see greetings from different upstreams:
 
 ```exec
-curl "http://{{source ~/deployment/vars && echo $eip_greeter}}:8080"
+curl "http://$(gcloud beta compute addresses describe router-ip --region us-east1 --format json|jq -r '.address'):8080"
 ```
