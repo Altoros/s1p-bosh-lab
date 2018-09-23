@@ -33,19 +33,18 @@ cd setup-bosh-environment
 ./provision_deploy_script.sh
 ```
 
-
-### SSH into deployed jumpbox
-[Regions and Zones](https://cloud.google.com/compute/docs/regions-zones/)
+Once we run this script it will prompt you to run following:
 ```
-gcloud compute --project "YOUR_PROJECT_ID" ssh --zone "yourregion" "yourinstancename"
-```
-
-### Switch to ubuntu user
-```
-sudo su - ubuntu
+bash -l
+direnv allow
+bbl up
 ```
 
-### TEST BOSH Deployment
+
+We can validate that env variables where set by running following:
 ```
-bosh vms
+env|grep -i bbl
+BBL_IAAS=gcp
+BBL_GCP_REGION=us-east1
+BBL_GCP_SERVICE_ACCOUNT_KEY=s1pbosh.key.json
 ```
