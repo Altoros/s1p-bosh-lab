@@ -40,9 +40,10 @@ if [ -z "$(which bosh)" ]; then
 fi
 
 # in .bashrc
-cp ~/.bashrc ~/.bashrc.bk
+[ ! -f ~/.bashrc.bk ] && cp ~/.bashrc ~/.bashrc.bk
 grep -q '~/bin:' ~/.bashrc || echo -e 'export PATH=~/bin:$PATH' >> ~/.bashrc
 grep -q s1p-bosh-lab ~/.bashrc || echo -e 'if [ -d ~/s1p-bosh-lab ]; then\n  source ~/s1p-bosh-lab/.envrc\nfi' >> ~/.bashrc
+grep -q netcat ~/.bashrc || echo -e 'if [ -z $(which nc) ]; then\n  sudo apt-get update && sudo apt-get install netcat-openbsd tree -y\nfi' >> ~/.bashrc
 
 # make exec
 chmod +x ~/bin/*
