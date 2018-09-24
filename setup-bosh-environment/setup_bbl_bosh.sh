@@ -40,6 +40,7 @@ if [ -z "$(which bosh)" ]; then
 fi
 
 # in .bashrc
+cp ~/.bashrc ~/.bashrc.bk
 grep -q '~/bin:' ~/.bashrc || echo -e 'export PATH=~/bin:$PATH' >> ~/.bashrc
 grep -q s1p-bosh-lab ~/.bashrc || echo -e 'if [ -d ~/s1p-bosh-lab ]; then\n  source ~/s1p-bosh-lab/.envrc\nfi' >> ~/.bashrc
 
