@@ -26,12 +26,6 @@ The below script will pull down remote dependencies from Debian repo, and other 
 ./setup_bbl_bosh.sh
 ```
 
-### RUN provision_deploy_script.sh
-```
-cd setup-bosh-environment
-./provision_deploy_script.sh
-```
-
 Once we run this script it will prompt you to run following:
 ```
 bash -l
