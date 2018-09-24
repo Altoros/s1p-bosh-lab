@@ -1,5 +1,3 @@
-# BOSH Addon's Exercises	# BOSH Addon's Exercise
- ### Change directories into ~/s1p-bosh-lab/bosh-addons/
 ## What is BOSH	```
 BOSH is a project that unifies release engineering, deployment, and lifecycle management of small and large-scale cloud software. BOSH can provision and deploy software over hundreds of VMs. It also performs monitoring, failure recovery, and software updates with zero-to-minimal downtime.  	cd ~/s1p-bosh-lab/bosh-addons/
 [More about BOSH](https://bosh.io/docs/)	```
