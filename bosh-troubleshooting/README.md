@@ -1,166 +1,111 @@
 # BOSH TROUBLESHOOTING
 
-### Troubleshooting the nginx deployment
+## Explore the BOSH VM folder structure
 
-***Remember the nginx deployment***
-```
-$ bosh vms
-Using environment '10.0.0.70' as client 'admin'
+Let's take a look at the structure of the BOSH VM:
 
-Task 35
-Task 36
-Task 35 done
+1. SSH to any BOSH VM with:
+    ```exec
+    bosh -d greeter ssh app/0
+    ```
 
-Task 36 done
+2. Make yourself root:
+    ```exec
+    sudo -i
+    ```
 
-Deployment 'nginx'
+3. Navigate to the root BOSH directory (`/var/vcap`) and explore its contents.
 
-Instance                                           Process State  AZ  IPs         VM CID                                   VM Type      Active
-nginx-centos/94e82144-f161-4f12-af2f-5c0dd55df24e  running        z1  10.0.0.137  vm-28a4e3e9-802e-4bfe-7cef-bc2c8813f136  nginx-small  false
-nginx-ubuntu/23a81ebe-af07-4675-adc3-244153394e4a  failing        z1  10.0.0.138  vm-a0de1797-3905-446f-7209-308d7ce52612  nginx-small  false
+4. View all the installed jobs:
+    ```exec
+    cd /var/vcap/jobs/
+    ```
+    Select some job and explore its contents.
 
-2 vms
+5. View all the installed packages:
+    ```exec
+    cd /var/vcap/packages
+    ```
+    Select some package and explore its contents.
 
-Deployment 'ucc'
+6. View the Monit files:
+    ```exec
+    cd /var/vcap/monit
+    ```
+    Also view Monit status with:
+    ```exec
+    monit status
+    monit summary
+    ```
 
-Instance                                 Process State  AZ  IPs         VM CID                                   VM Type   Active
-db/30d9216e-38a0-4645-bad7-cc7ae8fbca27  running        z1  10.0.0.134  vm-7f793f9c-f0b7-49b5-7fc7-0cc07fb17c84  db-small  false
+7. View the logs
+    ```exec
+    cd /var/vcap/sys/log
+    ```
 
-1 vms
+## Connect to the Director database
 
-Succeeded
-```
+1.  SSH to a BOSH instance:
+    ```exec
+    bbl ssh --director
+    ```
+    or you could do the traditional method of looking at $BBL_STATE_DIRECTORY and looking in vars.
+    You would have to either ssh directly to jumpbox then ssh to director or ssh with proxy parameters passed.
+    [bbl ssh and bosh ssh](https://github.com/cloudfoundry/bosh-bootloader/blob/master/docs/howto-ssh.md)
 
-***Lets check the processes using BOSH***
-```
-$ bosh instances --ps
-Using environment '10.0.0.70' as client 'admin'
+2. Make yourself root:
+    ```exec
+    sudo -i
+    ```
 
-Task 39
-Task 40
-Task 39 done
+3. Install the PostgreSQL client:
+    ```exec
+    echo "deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main" > /etc/apt/sources.list.d/pgdg.list
+    wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
+    apt-get update
+    apt-get install -y postgresql-client-9.6
+    ```
 
-Task 40 done
+4. Connect to the BOSH database:
+    ```exec
+    psql -h 127.0.0.1 -p 5432 bosh postgres
+    ```
 
-Deployment 'nginx'
+5. List all tables:
+    ```exec
+    \d
+    ```
+    Use the following command to exit the table list.
+    ```exec
+    \q
+    ```
 
-Instance                                           Process  Process State  AZ  IPs
-nginx-centos/94e82144-f161-4f12-af2f-5c0dd55df24e  -        running        z1  10.0.0.137
-~                                                  nginx    running        -   -
-nginx-ubuntu/23a81ebe-af07-4675-adc3-244153394e4a  -        failing        z1  10.0.0.138
-~                                                  nginx    unknown        -   -
+6. View the contents of the `releases` table:
+    ```exec
+    SELECT * FROM releases;
+    ```
 
-4 instances
+7. Use `\q` to exit the client.
 
-Deployment 'ucc'
 
-Instance                                 Process     Process State  AZ  IPs
-db/30d9216e-38a0-4645-bad7-cc7ae8fbca27  -           running        z1  10.0.0.134
-~                                        pg_janitor  running        -   -
-~                                        postgres    running        -   -
+## View the BOSH debug log
 
-3 instances
+1. Find out the task number:
+    ```exec
+    bosh tasks
+    ```
 
-Succeeded
-```
+    For tasks that are have already been completed, use:
+    ```exec
+    bosh tasks --recent
+    ```
 
-***Lets check the logs on the server***
+2. View task info:
+    ```
+    bosh task <number>
+    ```
 
-```
-$ bosh ssh -d nginx nginx-ubuntu/0
-$ sudo su -
-$ cd /var/vcap/sys/log/nginx/
-$ cat error.log
-2018/09/20 23:07:32 [emerg] 4590#4590: socket() [::]:80 failed (97: Address family not supported by protocol)
-2018/09/20 23:08:02 [emerg] 4622#4622: socket() [::]:80 failed (97: Address family not supported by protocol)
-2018/09/20 23:08:43 [emerg] 4657#4657: socket() [::]:80 failed (97: Address family not supported by protocol)
-2018/09/20 23:09:23 [emerg] 4669#4669: socket() [::]:80 failed (97: Address family not supported by protocol)
-2018/09/20 23:10:03 [emerg] 4675#4675: socket() [::]:80 failed (97: Address family not supported by protocol)
-2018/09/20 23:10:43 [emerg] 4683#4683: socket() [::]:80 failed (97: Address family not supported by protocol)
-$ exit
-```
-
-***lets edit the nginx.yml***
-```
-- name: nginx-ubuntu
-  instances: 1
-  azs: [ z1 ]
-  vm_type: nginx-small
-  stemcell: ubuntu
-  networks:
-  - name: nginx
-  jobs:
-  - name: nginx
-    release: nginx
-    properties:
-      nginx_conf: |
-        worker_processes  1;
-        error_log /var/vcap/sys/log/nginx/error.log   info;
-        #pid        logs/nginx.pid; # PIDFILE is configured via monit's ctl
-        events {
-          worker_connections  1024;
-        }
-        http {
-          include /var/vcap/packages/nginx/conf/mime.types;
-          default_type  application/octet-stream;
-          sendfile        on;
-          ssi on;
-          keepalive_timeout  65;
-          server_names_hash_bucket_size 64;
-          server {
-            server_name _; # invalid value which will never trigger on a real hostname.
-            #listen [::]:80 ipv6only=off;
-            access_log /var/vcap/sys/log/nginx/toto-access.log;
-            error_log /var/vcap/sys/log/nginx/toto-error.log;
-          }
-          root /var/vcap/store/nginx;
-          index index.shtml index.html index.htm;
-        }
-      pre_start: |
-        #!/bin/bash -ex
-        NGINX_DIR=/var/vcap/store/nginx
-        if [ ! -d $NGINX_DIR ]; then
-          mkdir -p $NGINX_DIR
-          cd $NGINX_DIR
-          echo  '<html><title>hello</title><body><h1>Hello <!--#echo var="REMOTE_ADDR" --></h1></body></html>' > index.shtml
-        fi
-```
-
-***Lets restart the nginx deployment***
-```
-$ bosh deploy -d nginx  nginx.yml
-bosh vms
-Using environment '10.0.0.70' as client 'admin'
-
-Task 48
-Task 49
-Task 48 done
-
-Task 49 done
-
-Deployment 'nginx'
-
-Instance                                           Process State  AZ  IPs         VM CID                                   VM Type      Active
-nginx-centos/94e82144-f161-4f12-af2f-5c0dd55df24e  running        z1  10.0.0.137  vm-28a4e3e9-802e-4bfe-7cef-bc2c8813f136  nginx-small  false
-nginx-ubuntu/23a81ebe-af07-4675-adc3-244153394e4a  running        z1  10.0.0.138  vm-16c0a133-1b92-4251-46c3-1311bd64f3dd  nginx-small  false
-
-2 vms
-
-Deployment 'ucc'
-
-Instance                                 Process State  AZ  IPs         VM CID                                   VM Type   Active
-db/30d9216e-38a0-4645-bad7-cc7ae8fbca27  running        z1  10.0.0.134  vm-7f793f9c-f0b7-49b5-7fc7-0cc07fb17c84  db-small  false
-
-1 vms
-
-Succeeded
-```
-
-***Lets test the result***
-```
-$ curl 10.0.0.138
-<html><title>hello</title><body><h1>Hello 10.0.0.3</h1></body></html>
-```
-### Troubleshooting the logsearch deployment
-
-### Other BOSH Troubleshooting TIPS
+3. View the task debug log:
+    ```
+    bosh task <number> --debug
+    ```
