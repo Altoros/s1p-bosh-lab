@@ -1,4 +1,4 @@
-!#/bin/bash
+#!/bin/bash
 
 # Tear down deployments and then infrastructure
 pushd $BBL_STATE_DIRECTORY
