@@ -10,8 +10,13 @@ BOSH allows individual developers and teams to easily version, package and deplo
 
 ## Exercises
 1. [Setup BOSH environment](setup-bosh-environment)
-1. [Create Greeter Bosh Release](create_bosh_release)
-1. [Bosh Addons](bosh-addons)
+1. [Create Greeter Bosh Release](create-bosh-release)
+1. [Cloud Config & Scale](cloud-config-n-scale)
 1. [Deployment troubleshooting using BOSH](bosh-troubleshooting)
+
+## Extra
+1. [Bosh Addons](bosh-addons)
 1. [Creating a Nginx BOSH release](nginx-release)
-1. [Creating logsearch BOSH Release](logsearch-boshrelease)
+
+## Clean up
+1. [Clean up](cleanup-environment)

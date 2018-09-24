@@ -15,3 +15,5 @@ exclude [Hash, optional]: Specifies exclusion placement rules. Available in bosh
 ```
 [Director Runtime Config](https://bosh.io/docs/runtime-config/#addons)  
 [Common Addons](https://bosh.io/docs/addons-common/)
+
+In this exercise we will add a user account, s1puser, to the app vms.
